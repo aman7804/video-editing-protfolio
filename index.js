@@ -11,44 +11,39 @@ document.addEventListener("DOMContentLoaded", function () {
       : "Enable Dark Mode";
   });
 
-  // Pause other videos on play of current one.
-  document.addEventListener(
-    "play",
-    function (event) {
-      document.querySelectorAll("video").forEach((video) => {
-        if (video !== event.target) video.pause();
-      });
-    },
-    true
-  );
-
   function showDiv(id) {
-    const contentTypeDiv = document.createElement("div");
-    contentTypeDiv.id = id;
-    contentTypeDiv.style = `
-    gap: 30px;
-    display: flex;
-    justify-content: center
-    `;
-
     const reelVideoContainer = document.getElementById("reel-content-area");
     const longVideoContainer = document.getElementById("lv-content-area");
+    let contentTypeDiv = document.getElementById(`${id}`);
+
+    if (!contentTypeDiv) {
+      contentTypeDiv = document.createElement("div");
+      contentTypeDiv.id = id;
+      contentTypeDiv.style = `
+      gap: 30px;
+      display: flex;
+      justify-content: center
+      `;
+    }
+
     if (Object.keys(reelVideos).some((key) => contentTypeDiv.id === key)) {
-      reelVideoContainer.innerHTML = "";
-      reelVideoContainer.appendChild(contentTypeDiv);
-      reelVideoContainer
-        .querySelectorAll(".content")
-        .forEach((div) => (div.style.display = "none"));
-      document.getElementById(id).style.display = "flex";
+      console.log(reelVideoContainer.children);
+
+      for (let child of reelVideoContainer.children) {
+        child.style.display = "none";
+        console.log("for loop worked");
+      }
+      if (reelVideoContainer.querySelector(`#${id}`))
+        contentTypeDiv.style.display = "flex";
+      else reelVideoContainer.appendChild(contentTypeDiv);
       loadVideos(contentTypeDiv);
     }
     if (Object.keys(longVideos).some((key) => contentTypeDiv.id === key)) {
-      longVideoContainer.innerHTML = "";
-      longVideoContainer.appendChild(contentTypeDiv);
-      longVideoContainer
-        .querySelectorAll(".content")
-        .forEach((div) => (div.style.display = "none"));
-      document.getElementById(id).style.display = "flex";
+      for (let child of longVideoContainer.children)
+        child.style.display = "none";
+      if (longVideoContainer.querySelector(`#${id}`))
+        contentTypeDiv.style.display = "flex";
+      else longVideoContainer.appendChild(contentTypeDiv);
       loadVideos(contentTypeDiv);
     }
   }
@@ -57,26 +52,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const videos = contentTypeDiv.id.includes("vlogs")
       ? longVideos[contentTypeDiv.id]
       : reelVideos[contentTypeDiv.id];
+    if (contentTypeDiv.innerHTML.trim() === "") {
+      Object.entries(videos).forEach(([key, value]) => {
+        const iFrameElement = document.createElement("iframe");
+        if (contentTypeDiv.parentElement.id === "reel-content-area")
+          if (!value.includes("1-IltCyOWkVSXaGHkeD4mItj7L2VbEMVw"))
+            iFrameElement.classList.add("iframe-vertical");
+        iFrameElement.src = value;
+        iFrameElement.controls = true;
+        iFrameElement.classList.add(
+          // "card-img-top",
+          // "img-fluid",
+          // "rounded-3",
+          "responsive-iframe"
+        );
 
-    Object.entries(videos).forEach(([key, value]) => {
-      const iFrameElement = document.createElement("iframe");
-      if (contentTypeDiv.parentElement.id === "reel-content-area")
-        if (!value.includes("1-IltCyOWkVSXaGHkeD4mItj7L2VbEMVw"))
-          iFrameElement.classList.add("iframe-vertical");
-      iFrameElement.src = value;
-      iFrameElement.controls = true;
-      iFrameElement.classList.add(
-        // "card-img-top",
-        // "img-fluid",
-        // "rounded-3",
-        "responsive-iframe"
-      );
-
-      const cardDiv = document.createElement("div");
-      cardDiv.classList.add("content");
-      cardDiv.appendChild(iFrameElement);
-      contentTypeDiv.appendChild(cardDiv);
-    });
+        const cardDiv = document.createElement("div");
+        cardDiv.classList.add("content");
+        cardDiv.appendChild(iFrameElement);
+        contentTypeDiv.appendChild(cardDiv);
+      });
+    }
   }
 
   // ✅ Attach event listeners instead of using inline `onclick`
@@ -106,13 +102,14 @@ document.addEventListener("DOMContentLoaded", function () {
         detail.open &&
         detail.querySelector("summary").textContent === "Reels"
       ) {
-        showDiv("aesthetic-montage");
+        if (!document.getElementById("aesthetic-montage"))
+          showDiv("aesthetic-montage");
       }
       if (
         detail.open &&
         detail.querySelector("summary").textContent === "Long Videos"
       ) {
-        showDiv("vlogs");
+        if (!document.getElementById("vlogs")) showDiv("vlogs");
       }
     });
   });
