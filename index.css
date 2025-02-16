@@ -1,0 +1,133 @@
+body {
+  background-color: #F8FAFC;
+  color: #212529;
+}
+
+header {
+  background-color: #D9EAFD;
+  color: #212529;
+}
+
+details {
+  background-color: #F8FAFC;
+  border: 1px solid #BCCCDC;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+details summary {
+  cursor: pointer;
+}
+
+.btn-outline-primary {
+  color: #9AA6B2;
+  border-color: #BCCCDC;
+}
+
+.btn-outline-primary:hover {
+  background-color: #D9EAFD;
+}
+
+.btn-primary {
+  background-color: #9AA6B2;
+  border-color: #9AA6B2;
+}
+
+.btn-primary:hover {
+  background-color: #BCCCDC;
+  border-color: #BCCCDC;
+}
+.content {
+  position: relative;
+  width: 100%;
+  max-width: 640px; /* Adjust max width if needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  overflow: hidden;
+}
+
+/* Center align videos in container */
+#reel-content-area,
+#lv-content-area {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Media Query for Small Screens */
+@media (max-width: 768px) {
+  .content {
+    max-width: 100%;
+    padding-top: 56.25%; /* Maintain aspect ratio */
+  }
+}
+
+/* Dark Mode - Only applied when .dark-mode is active */
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #ddd;
+}
+
+body.dark-mode header {
+  background-color: #333;
+  color: #ddd;
+}
+
+body.dark-mode details {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
+body.dark-mode .btn-outline-primary {
+  color: #ddd;
+  border-color: #666;
+}
+
+body.dark-mode .btn-outline-primary:hover {
+  background-color: #444;
+}
+
+body.dark-mode .btn-primary {
+  background-color: rgb(102, 179, 255);
+  border-color: rgb(102, 179, 255);
+}
+
+body.dark-mode .btn-primary:hover {
+  background-color: #555;
+  border-color: #555;
+}
+
+button#toggle-dark-mode {
+  padding: 0.5rem 1rem;
+  background-color: #9AA6B2;
+  border: none;
+  border-radius: 5px;
+  color: #F8FAFC;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button#toggle-dark-mode:hover {
+  opacity: 0.8;
+}
+
+body.dark-mode button#toggle-dark-mode {
+  background-color: rgb(102, 179, 255);
+  color: #1e1e1e;
+}
+
+.iframe-horizontal {
+  aspect-ratio: 16 / 9;
+  width: 100%; /* change this to a fixed width, or create a container with a width. */
+  height: 100%;
+}
+
+.iframe-vertical {
+  aspect-ratio: 9 / 16;
+  width: 180px;
+  height: 320px;
+  object-fit: cover;
+}
