@@ -131,3 +131,11 @@ body.dark-mode button#toggle-dark-mode {
   height: 320px;
   object-fit: cover;
 }
+
+@media (max-width: 576px) {
+  .reels-nav-item {
+    font-size: 10px !important;
+    /* padding: 4px !important; */
+    /* white-space: nowrap !important; */
+  }
+}

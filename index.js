@@ -27,12 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (Object.keys(reelVideos).some((key) => contentTypeDiv.id === key)) {
-      console.log(reelVideoContainer.children);
-
-      for (let child of reelVideoContainer.children) {
+      for (let child of reelVideoContainer.children)
         child.style.display = "none";
-        console.log("for loop worked");
-      }
       if (reelVideoContainer.querySelector(`#${id}`))
         contentTypeDiv.style.display = "flex";
       else reelVideoContainer.appendChild(contentTypeDiv);
@@ -48,30 +44,98 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // function loadVideos(contentTypeDiv) {
+  //   const videos = contentTypeDiv.id.includes("vlogs")
+  //     ? longVideos[contentTypeDiv.id]
+  //     : reelVideos[contentTypeDiv.id];
+
+  //   const container = document.createElement("div");
+  //   container.classList.add("container");
+  //   const rows = [];
+  //   let rowCount = 0;
+  //   for (let i = 0; i < Math.ceil(Object.keys(videos).length / 3); i++) {
+  //     let row = document.createElement("div");
+  //     row.classList.add("row");
+  //     rows.push(row);
+  //   }
+  //   rows.forEach((r) => {
+  //     for (let i = 0; i < 3; i++) {
+  //       let d = document.createElement("div");
+  //       d.classList.add("col");
+  //       r.appendChild(d);
+  //     }
+  //     container.appendChild(r);
+  //   });
+
+  //   if (contentTypeDiv.innerHTML.trim() === "") {
+  //     Object.entries(videos).forEach(([key, value]) => {
+  //       const iFrameElement = document.createElement("iframe");
+  //       if (contentTypeDiv.parentElement.id === "reel-content-area")
+  //         if (!value.includes("1-IltCyOWkVSXaGHkeD4mItj7L2VbEMVw"))
+  //           iFrameElement.classList.add("iframe-vertical");
+
+  //       iFrameElement.src = value;
+  //       iFrameElement.classList.add(
+  //         // "card-img-top",
+  //         // "img-fluid",
+  //         // "rounded-3",
+  //         "responsive-iframe"
+  //       );
+
+  //       const cardDiv = document.createElement("div");
+  //       cardDiv.classList.add("content");
+  //       cardDiv.appendChild(iFrameElement);
+  //       contentTypeDiv.appendChild(cardDiv);
+  //       // rows.forEach((row) => {
+  //       //   row.children[0].appendChild(iFrameElement);
+  //       //   container.appendChild(row);
+  //       //   contentTypeDiv.appendChild(container);
+  //       // });
+  //     });
+  //   }
+  // }
+
   function loadVideos(contentTypeDiv) {
     const videos = contentTypeDiv.id.includes("vlogs")
       ? longVideos[contentTypeDiv.id]
       : reelVideos[contentTypeDiv.id];
-    if (contentTypeDiv.innerHTML.trim() === "") {
-      Object.entries(videos).forEach(([key, value]) => {
-        const iFrameElement = document.createElement("iframe");
-        if (contentTypeDiv.parentElement.id === "reel-content-area")
-          if (!value.includes("1-IltCyOWkVSXaGHkeD4mItj7L2VbEMVw"))
-            iFrameElement.classList.add("iframe-vertical");
-        iFrameElement.src = value;
-        iFrameElement.controls = true;
-        iFrameElement.classList.add(
-          // "card-img-top",
-          // "img-fluid",
-          // "rounded-3",
-          "responsive-iframe"
-        );
 
-        const cardDiv = document.createElement("div");
-        cardDiv.classList.add("content");
-        cardDiv.appendChild(iFrameElement);
-        contentTypeDiv.appendChild(cardDiv);
+    if (!videos) return; // Prevent errors if videos are undefined
+
+    if (contentTypeDiv.innerHTML.trim() === "") {
+      const container = document.createElement("div");
+      container.classList.add("container");
+
+      let row = document.createElement("div");
+      row.classList.add("row");
+
+      Object.entries(videos).forEach(([key, value], index) => {
+        if (index % 4 === 0 && index !== 0) {
+          container.appendChild(row);
+          row = document.createElement("div");
+          row.classList.add("row");
+        }
+
+        const col = document.createElement("div");
+        col.classList.add("col");
+
+        const iFrameElement = document.createElement("iframe");
+        if (
+          contentTypeDiv.parentElement.id === "reel-content-area" &&
+          !value.includes("1-IltCyOWkVSXaGHkeD4mItj7L2VbEMVw")
+        ) {
+          iFrameElement.classList.add("iframe-vertical");
+        }
+
+        iFrameElement.src = value;
+        iFrameElement.classList.add("responsive-iframe");
+
+        col.appendChild(iFrameElement);
+        row.appendChild(col);
       });
+
+      container.appendChild(row); // Append the last row
+      contentTypeDiv.appendChild(container); // Append container to contentTypeDiv
     }
   }
 
